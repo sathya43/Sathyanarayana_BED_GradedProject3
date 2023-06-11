@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Ticket tracking system</title>
+
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"
+	integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+	crossorigin="anonymous"></script>
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css"
+	rel="stylesheet" type="text/css" />
+<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+
+
+</head>
+
+
+<body>
+	<div th:insert="header :: header"></div>
+	<div class="container">
+		<h2>Update Ticket</h2>
+
+		<br>
+		<div class="container" style="opacity: 0.6; background-color: #f0f0f0; padding: 10px;">
+			<div th:if="${ticket.attachment}">
+				<h6>Attachments are:</h6>
+				<div class="container">
+					<div>
+						<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZAicyeoKPa96CrtC5hQsGWVZPFq_-S88hK8o1lc8LPA&s" width="50">
+					</div>
+					<br>
+					<div>
+						<a th:href="@{/download/{id}(id=${ticket.id})}">[[${ticket.attachment.attachementName}]]</a>
+					</div>
+				</div>
+				<br>
+				<form enctype="multipart/form-data" action="#"
+					th:action="@{/upload/{id}(id=${ticket.id})}"
+					th:object="${attachment}" method="POST">
+					<input type="file" id="myfile" name="myfile" required>
+					<br>
+					<button type="submit" class="btn btn-info">Replace Attachment</button>
+				</form>
+			</div>
+			<div th:unless="${ticket.attachment}">
+				<form enctype="multipart/form-data" action="#"
+					th:action="@{/upload/{id}(id=${ticket.id})}"
+					th:object="${attachment}" method="POST">
+					<input type="file" id="myfile" name="myfile"> <br>
+					<button type="submit" class="btn btn-info col-2">Upload</button>
+				</form>
+
+			</div>
+		</div>
+
+		<br>
+		<form action="#" th:action="@{/ticket/update}" th:object="${ticket}"
+			method="POST" style="background-color: #f8f8f8; border: 1px solid #ccc; padding: 10px;">
+
+			<!-- Add hidden form field to handle update -->
+			<input type="hidden" name="_method" value="PUT"> <input
+				type="hidden" th:field="*{id}" /> <label style="font-weight: bold;">Ticket
+				Name</label> <input type="text" th:field="*{ticketName}"
+				class="form-control mb-4 col-4" required> <label
+				style="font-weight: bold;">Short Description</label> <input
+				type="text" th:field="*{shortDescription}"
+				class="form-control mb-4 col-4" required> <label
+				style="font-weight: bold;">Content</label>
+			<textarea id="tiny" th:field="*{content}" class="content"
+				name="example" required></textarea>
+
+			<label style="font-weight: bold;">Created On (MM/dd/yyyy)</label> <input
+				readonly type="text" th:field="*{createDate}"
+				class="form-control mb-4 col-4">
+
+
+
+			<button type="submit" class="btn btn-info col-2">Update
+				Ticket</button>
+		</form>
+		<hr>
+
+
+		<button th:href="@{/getTickets}" class="btn btn-primary">List of Tickets</button>
+	</div>
+	
+	
+	<div th:insert="footer :: footer" style="padding-top: 50px;"></div>
+
+    <script th:src="@{/richtext/customRichText.js}"></script>
+
+
+</body>
+</html>

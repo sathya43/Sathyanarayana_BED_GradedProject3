@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Ticket Tracker</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+<style>
+	.container {
+		padding: 20px;
+	}
+
+	.my-2 {
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
+	h1 {
+		margin-top: 0;
+	}
+
+	@media (max-width: 576px) {
+		.container {
+			padding: 10px;
+		}
+
+		.my-2 {
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+	}
+</style>
+</head>
+<body>
+	<div th:insert="header :: header"></div>
+	<div class="container my-2" align="center">
+		<div>
+			<h1>Ticket Tracker application</h1>
+			<hr>
+			<br>
+		</div>
+
+		<h3>Search results</h3>
+		<a th:href="@{/getTickets}">Go to the list of Tickets page</a>
+		<br><br>
+		<form th:action="@{/ticket/searchByNameorDescription}" method="get">
+			<input align="left" type="text" name="keyword" th:value="${keyword}"
+				placeholder="Find ticket by Name or short description" size="50">
+			<button type="submit" class="btn btn-info">Search</button>
+		</form>
+
+		<div class="table-responsive">
+			<table style="width: 100%" border="1"
+				class="table table-striped">
+				<thead>
+					<tr>
+						<th>S.No</th>
+						<th>Ticket Title</th>
+						<th>Ticket Short Description</th>
+						<th>Ticket Created on</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="ticket:${allticketslist}">
+						<td th:text="${ticket.id}"></td>
+						<td th:text="${ticket.ticketName}"></td>
+						<td th:text="${ticket.shortDescription}"></td>
+						<td th:text="${ticket.createDate}"></td>
+						<td>
+							<a th:href="@{/ticket/update/{id}(id=${ticket.id})}"
+								class="btn btn-primary">Update</a>
+							<a th:href="@{/ticket/{id}(id=${ticket.id})}" class="btn btn-danger">Delete</a>
+							<a th:href="@{/ticket/view/{id}(id=${ticket.id})}"
+								class="btn btn-info">View</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div th:insert="footer :: footer" style="padding-top: 50px;"></div>
+
+</body>
+</html>
